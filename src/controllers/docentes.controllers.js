@@ -3,7 +3,6 @@ import Docente from "../models/docente.model.js";
 export const getDocentes = async (req, res) => {
   try {
     const docentes = await Docente.find()
-    .populate("concepts")
     .populate("createdBy")
     .populate("updatedBy");
     res.json(docentes);

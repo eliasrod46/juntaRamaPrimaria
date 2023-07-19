@@ -22,9 +22,11 @@ app.use(cookieParser());
 //---> Routes
 import authRoutes from "./routes/auth.routes.js";
 import docentesRoutes from "./routes/docentes.routes.js";
+import conceptsRoutes from "./routes/concepts.routes.js";
 
 app.use("/api/auth", authRoutes);
 app.use("/api/docentes", docentesRoutes);
+app.use("/api/concepts", conceptsRoutes);
 
 //---> client route
 if (process.env.NODE_ENV === "production") {

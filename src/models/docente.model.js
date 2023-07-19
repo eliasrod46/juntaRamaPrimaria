@@ -22,11 +22,12 @@ const docenteSchema = new mongoose.Schema(
     concepts: {
       type: [
         {
-          note: {type: Number, required: true, trim: true},
-          startDate: {type: Date, required: true, trim: true},
-          endDate: {type: Date, required: true, trim: true},
-          sanitizedNote: {type: Number, required: true, trim: true}
-        }
+          id: { type: Number, required: true, unique: true },
+          note: { type: Number, required: true, trim: true },
+          startDate: { type: Date, required: true, trim: true },
+          endDate: { type: Date, required: true, trim: true },
+          sanitizedNote: { type: Number, required: true, trim: true },
+        },
       ],
       validate: [(val) => val.length <= 15, "concepts exceeds the limit of 15"],
     },
