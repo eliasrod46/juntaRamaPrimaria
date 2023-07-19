@@ -21,12 +21,10 @@ app.use(cookieParser());
 
 //---> Routes
 import authRoutes from "./routes/auth.routes.js";
-import taksRoutes from "./routes/tasks.routes.js";
 import docentesRoutes from "./routes/docentes.routes.js";
 
 app.use("/api/auth", authRoutes);
 app.use("/api/docentes", docentesRoutes);
-app.use("/api/", taksRoutes);
 
 //---> client route
 if (process.env.NODE_ENV === "production") {

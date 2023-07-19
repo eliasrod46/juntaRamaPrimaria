@@ -9,8 +9,8 @@ import { useForm } from "react-hook-form";
 
 export function DocenteFormPage() {
   const { user } = useAuth();
-  const [lockError, setLockError] = useState(false)
-  const { createDocente, docentesErrors,updateDocente } = useDocentes();
+  const [block, setBlock] = useState(false)
+  const { createDocente, docentesErrors,updateDocente,getDocente } = useDocentes();
   const navigate = useNavigate();
   const params = useParams();
   const {
@@ -22,18 +22,18 @@ export function DocenteFormPage() {
     resolver: zodResolver(docenteSchema),
   });
 
-  useEffect(() => {
-    if (lockError) navigate("/docentes");
-  }, [lockError]);
+
 
   const onSubmit = async (data) => {
     try {
       if (params.id) {
         updateDocente(params.id, data);
       } else {
-        createDocente({...data,createdBy:user.id});
+        createDocente(data);
       }
-      setLockError(true)
+      setTimeout(() =>{
+        navigate('/docentes')
+      },2000)
     } catch (error) {
       console.log(error);
       // window.location.href = "/";
@@ -44,16 +44,21 @@ export function DocenteFormPage() {
     const loadDocente = async () => {
       if (params.id) {
         const docente = await getDocente(params.id);
+
         setValue("dni", docente.dni);
         setValue("name", docente.name);
         setValue("lastname", docente.lastname);
-        setValue("concepts", docente.concepts);
-        setValue("createdBy", docente.createdBy);
-        setValue("updatedBy", user.id);
       }
     };
     loadDocente();
   }, []);
+
+  useEffect(()=>{
+    setBlock(true)
+  },[docentesErrors.length])
+
+  
+
 
   
 
@@ -96,12 +101,6 @@ export function DocenteFormPage() {
         {errors.lastname && (
           <p className="text-red-500 text-xs italic">Please enter a lastname.</p>
         )}
-
-
-
-
-
-
         <Button>Save</Button>
       </form>
     </Card>

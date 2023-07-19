@@ -4,10 +4,11 @@ import {
   getDocente,
   deleteDocente,
   createDocente,
+  updateDocente
 } from "../controllers/docentes.controllers.js";
 import { auth } from "../middlewares/auth.middleware.js";
 import { validateSchema } from "../middlewares/validator.middleware.js";
-import { createDocenteSchema } from "../schemas/docente.schema.js";
+import { createDocenteSchema, updateDocenteSchema } from "../schemas/docente.schema.js";
 
 const router = Router();
 
@@ -19,6 +20,6 @@ router.delete("/:id", auth, deleteDocente);
 
 router.post("/", auth, validateSchema(createDocenteSchema), createDocente);
 
-// router.put("/tasks/:id", auth, updateTask);
+router.put("/:id", auth, validateSchema(updateDocenteSchema),updateDocente);
 
 export default router;

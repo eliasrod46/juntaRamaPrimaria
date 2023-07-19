@@ -6,8 +6,10 @@ export const getDocenteRequest = async (id) => axios.get(`/docentes/${id}`);
 
 export const createDocenteRequest = async (docente) => axios.post("/docentes", docente);
 
-export const updateDocenteRequest = async (docente) =>
-  axios.put(`/docentes/${docente._id}`, docente);
-
 export const deleteDocenteRequest = async (id) => axios.delete(`/docentes/${id}`);
+
+export const updateDocenteRequest = async (id, docente) => axios.put(`/docentes/${id}`, docente);
+
+
+
 

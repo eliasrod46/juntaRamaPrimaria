@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { AuthProvider } from "./context/authContext";
 import { DocenteProvider } from "./context/docentesContext";
-import { TaskProvider } from "./context/tasksContext";
 import { ProtectedRoute } from "./routes";
 
 import HomePage from "./pages/HomePage";
@@ -17,7 +16,6 @@ function App() {
   return (
     <AuthProvider>
       <DocenteProvider>
-        <TaskProvider>
           <BrowserRouter>
             <main className="container content-container mx-auto px-10 md:px-0">
               <Navbar />
@@ -32,13 +30,11 @@ function App() {
                   <Route path="/docente/:id" element={<DocentePage />} />
                   <Route path="/add-docente" element={<DocenteFormPage />} />
                   <Route path="/update-docente/:id" element={<DocenteFormPage />} />
-                  {/* <Route path="/tasks/:id" element={<TaskFormPage />} />
-                  <Route path="/profile" element={<h1>Profile</h1>} /> */}
+                  {/*<Route path="/profile" element={<h1>Profile</h1>} /> */}
                 </Route>
               </Routes>
             </main>
           </BrowserRouter>
-        </TaskProvider>
       </DocenteProvider>
 
     </AuthProvider>

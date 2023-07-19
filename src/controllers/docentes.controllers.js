@@ -60,6 +60,7 @@ export const createDocente = async (req, res) => {
       name,
       lastname,
       dni: Number(dni),
+      concepts : [],
       createdBy: req.user.id,
     });
     await newDocente.save();
@@ -69,16 +70,36 @@ export const createDocente = async (req, res) => {
   }
 };
 
-// export const updateTask = async (req, res) => {
-//   try {
-//     const { title, description, date } = req.body;
-//     const taskUpdated = await Task.findOneAndUpdate(
-//       { _id: req.params.id },
-//       { title, description, date },
-//       { new: true }
-//     );
-//     return res.json(taskUpdated);
-//   } catch (error) {
-//     return res.status(500).json({ message: error.message });
-//   }
-// };
+export const updateDocente = async (req, res) => {
+  try {
+    const { name, lastname, dni } = req.body;
+
+
+    // check dni is a number;
+    if (!Number(dni)){
+      return res.status(400).json({
+        message: ["The dni must be a number"],
+      });
+    }
+    
+    // check duplicate data
+    const dniFound = await Docente.findOne({ dni:Number(dni) });
+    if (dniFound){
+      return res.status(400).json({
+        message: ["The dni is already in use"],
+      });
+    }
+
+
+    const docenteUpdated = await Docente.findOneAndUpdate(
+      { _id: req.params.id },
+      {       name,
+        lastname,
+        dni: Number(dni), },
+      { new: true }
+    );
+    return res.json(docenteUpdated);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};

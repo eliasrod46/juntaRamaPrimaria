@@ -22,9 +22,7 @@ export function DocenteProvider({ children }) {
       return () => clearTimeout(timer);
     }
   }, [docentesErrors]);
-
-
-  
+ 
 
   const getDocentes = async () => {
     const res = await getDocentesRequest();
@@ -64,8 +62,8 @@ export function DocenteProvider({ children }) {
       const res = await updateDocenteRequest(id, docente);
       console.log(res.data);
     } catch (error) {
-      console.log(error.response.data);
-      setErrors(error.response.data.message);
+      // console.log(error.response.data.message);
+      setDocentesErrors(error.response.data.message);
     }
   };
 
