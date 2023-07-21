@@ -1,11 +1,18 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import {createDocenteRequest,deleteDocenteRequest,getDocenteRequest,getDocentesRequest,updateDocenteRequest} from "../api/docentes";
+import {
+  createDocenteRequest,
+  deleteDocenteRequest,
+  getDocenteRequest,
+  getDocentesRequest,
+  updateDocenteRequest,
+} from "../api/docentes";
 
 const DocenteContext = createContext();
 
 export const useDocentes = () => {
   const context = useContext(DocenteContext);
-  if (!context) throw new Error("useDocentes must be used within a TaskProvider");
+  if (!context)
+    throw new Error("useDocentes must be used within a TaskProvider");
   return context;
 };
 
@@ -22,7 +29,6 @@ export function DocenteProvider({ children }) {
       return () => clearTimeout(timer);
     }
   }, [docentesErrors]);
- 
 
   const getDocentes = async () => {
     const res = await getDocentesRequest();
@@ -32,7 +38,8 @@ export function DocenteProvider({ children }) {
   const deleteDocente = async (id) => {
     try {
       const res = await deleteDocenteRequest(id);
-      if (res.status === 204) setDocentes(docentes.filter((docente) => docente._id !== id));
+      if (res.status === 204)
+        setDocentes(docentes.filter((docente) => docente._id !== id));
     } catch (error) {
       console.log(error);
     }

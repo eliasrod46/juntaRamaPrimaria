@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Card, Input, Label,Message } from "../../components/ui";
+import { Button, Card, Input, Label, Message } from "../../components/ui";
 import { useDocentes } from "../../context/docentesContext";
 import { useAuth } from "../../context/authContext";
-import { docenteSchema } from '../../schemas/docente';
+import { docenteSchema } from "../../schemas/docente";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-export function DocenteFormPage() {
+export function ConceptFormPage() {
   const { user } = useAuth();
-  const [block, setBlock] = useState(false)
-  const { createDocente, docentesErrors,updateDocente,getDocente } = useDocentes();
+  const [block, setBlock] = useState(false);
+  const { createDocente, docentesErrors, updateDocente, getDocente } =
+    useDocentes();
   const navigate = useNavigate();
   const params = useParams();
   const {
@@ -22,8 +23,6 @@ export function DocenteFormPage() {
     resolver: zodResolver(docenteSchema),
   });
 
-
-
   const onSubmit = async (data) => {
     try {
       if (params.id) {
@@ -31,9 +30,9 @@ export function DocenteFormPage() {
       } else {
         createDocente(data);
       }
-      setTimeout(() =>{
-        navigate('/docentes')
-      },2000)
+      setTimeout(() => {
+        navigate("/docentes");
+      }, 2000);
     } catch (error) {
       console.log(error);
       // window.location.href = "/";
@@ -53,20 +52,15 @@ export function DocenteFormPage() {
     loadDocente();
   }, []);
 
-  useEffect(()=>{
-    setBlock(true)
-  },[docentesErrors.length])
-
-  
-
-
-  
+  useEffect(() => {
+    setBlock(true);
+  }, [docentesErrors.length]);
 
   return (
     <Card>
-        {docentesErrors.map((error, i) => (
-          <Message message={error} key={i} />
-        ))}
+      {docentesErrors.map((error, i) => (
+        <Message message={error} key={i} />
+      ))}
       <form onSubmit={handleSubmit(onSubmit)}>
         <Label htmlFor="dni">DNI</Label>
         <Input
@@ -99,7 +93,9 @@ export function DocenteFormPage() {
           autoFocus
         />
         {errors.lastname && (
-          <p className="text-red-500 text-xs italic">Please enter a lastname.</p>
+          <p className="text-red-500 text-xs italic">
+            Please enter a lastname.
+          </p>
         )}
         <Button>Save</Button>
       </form>

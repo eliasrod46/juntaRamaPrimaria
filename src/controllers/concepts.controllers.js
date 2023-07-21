@@ -2,9 +2,10 @@ import Docente from "../models/docente.model.js";
 
 export const getConcepts = async (req, res) => {
   try {
-    const docente = await Docente.findById(req.params.id).populate("concepts");
+    const docente = await Docente.findById(req.params.did).populate("concepts");
 
-    if (!docente) return res.status(404).json({ message: "Docente not found" });
+    if (!docente === -1)
+      return res.status(404).json({ message: "sera not found" });
     res.json({ concepts: docente.concepts });
   } catch (error) {
     return res.status(500).json({ message: error.message });

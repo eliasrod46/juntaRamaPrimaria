@@ -12,26 +12,21 @@ export function Navbar() {
         <Link to={isAuthenticated ? "/home" : "/"}>Junta Rama Primaria</Link>
       </h1>
       <div>
-      {isAuthenticated ? (
+        {isAuthenticated ? (
           <>
-          <span>
-              Welcome {user.username}
-          </span>
+            <span>Welcome {user.username}</span>
           </>
         ) : (
           <>
-            <span>
-                No User Logged
-            </span>
+            <span>No User Logged</span>
           </>
         )}
       </div>
       <ul className="flex gap-x-2">
         {isAuthenticated ? (
           <>
-
             <li>
-              <ButtonLink to="/add-docente">Agregar Docente</ButtonLink>
+              <ButtonLink to="/concepts">Conceptos</ButtonLink>
             </li>
             <li>
               <ButtonLink to="/docentes">Docentes</ButtonLink>

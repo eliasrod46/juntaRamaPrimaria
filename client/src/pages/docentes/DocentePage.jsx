@@ -1,24 +1,19 @@
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Card, Input, Label } from "../../components/ui";
 import { useDocentes } from "../../context/docentesContext";
 import { useForm } from "react-hook-form";
 
 export function DocentePage() {
-  const { getDocente, deleteDocente} = useDocentes();
+  const { getDocente, deleteDocente, docentes } = useDocentes();
   const [docente, setDocente] = useState({});
+
   const navigate = useNavigate();
   const params = useParams();
-  const {
-    register,
-    setValue,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
 
-  const onSubmit = async () => {
+  const onClick = async () => {
     try {
-      deleteDocente(params.id)
+      deleteDocente(params.id);
       navigate("/docentes");
     } catch (error) {
       console.log(error);
@@ -29,47 +24,33 @@ export function DocentePage() {
   useEffect(() => {
     const loadDocente = async () => {
       if (params.id) {
-        const recivedDocente = await getDocente(params.id);
-        setDocente(recivedDocente)
+        const res = await getDocente(params.id);
+        setDocente(res);
       }
     };
     loadDocente();
   }, []);
 
   return (
-    <Card>
-      <form onSubmit={handleSubmit(onSubmit)}>
-      <Label htmlFor="dni">DNI</Label>
-        <Input
-          type="number"
-          name="dni"
-          autoFocus
-          value={docente.dni}
-          readOnly 
-        />
+    <Card className="text-center">
+      {/* <Label htmlFor="dni">DNI</Label>
+      <Input type="number" name="dni" autoFocus value= readOnly /> */}
+      <div>
+        <span>DNI: </span>
+        <span> {docente.dni}</span>
+      </div>
 
-        <Label htmlFor="name">Nombres</Label>
-        <Input
-          type="text"
-          name="name"
-          autoFocus
-          value={docente.name}
-          readOnly 
-        />
+      <div>
+        <span>Nombres: </span>
+        <span> {docente.name}</span>
+      </div>
 
-<Label htmlFor="lastname">Apellidos</Label>
-        <Input
-          type="text"
-          name="lastname"
-          autoFocus
-          value={docente.lastname}
-          readOnly 
-        />
+      <div>
+        <span>Apellidos: </span>
+        <span> {docente.lastname}</span>
+      </div>
 
-
-
-        <Button>Delete</Button>
-      </form>
+      <Button onClick={onClick}>Delete</Button>
     </Card>
   );
 }
