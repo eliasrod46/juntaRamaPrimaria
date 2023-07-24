@@ -29,9 +29,7 @@ export function DocenteFormPage() {
       } else {
         createDocente(data);
       }
-      setTimeout(() => {
-        navigate("/docentes");
-      }, 2000);
+      navigate("/docentes");
     } catch (error) {
       console.log(error);
       // window.location.href = "/";

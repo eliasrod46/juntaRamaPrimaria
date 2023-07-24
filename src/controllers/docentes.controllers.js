@@ -3,8 +3,8 @@ import Docente from "../models/docente.model.js";
 export const getDocentes = async (req, res) => {
   try {
     const docentes = await Docente.find()
-    .populate("createdBy")
-    .populate("updatedBy");
+      .populate("createdBy")
+      .populate("updatedBy");
     res.json(docentes);
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -14,7 +14,6 @@ export const getDocentes = async (req, res) => {
 export const getDocente = async (req, res) => {
   try {
     const docente = await Docente.findById(req.params.id)
-      .populate("concepts")
       .populate("createdBy")
       .populate("updatedBy");
     if (!docente) return res.status(404).json({ message: "Docente not found" });
@@ -41,15 +40,15 @@ export const createDocente = async (req, res) => {
     const { name, lastname, dni } = req.body;
 
     // check dni is a number;
-    if (!Number(dni)){
+    if (!Number(dni)) {
       return res.status(400).json({
         message: ["The dni must be a number"],
       });
     }
-    
+
     // check duplicate data
-    const dniFound = await Docente.findOne({ dni:Number(dni) });
-    if (dniFound){
+    const dniFound = await Docente.findOne({ dni: Number(dni) });
+    if (dniFound) {
       return res.status(400).json({
         message: ["The dni is already in use"],
       });
@@ -59,7 +58,7 @@ export const createDocente = async (req, res) => {
       name,
       lastname,
       dni: Number(dni),
-      concepts : [],
+      concepts: [],
       createdBy: req.user.id,
     });
     await newDocente.save();
@@ -73,28 +72,30 @@ export const updateDocente = async (req, res) => {
   try {
     const { name, lastname, dni } = req.body;
 
-
     // check dni is a number;
-    if (!Number(dni)){
+    if (!Number(dni)) {
       return res.status(400).json({
         message: ["The dni must be a number"],
       });
     }
-    
-    // check duplicate data
-    const dniFound = await Docente.findOne({ dni:Number(dni) });
-    if (dniFound){
-      return res.status(400).json({
-        message: ["The dni is already in use"],
-      });
-    }
 
+    // get docente origianData
+    const thisDocente = await Docente.findOne({ _id: req.params.id });
+
+    // check duplicate data
+    const dniFound = await Docente.findOne({ dni: Number(dni) });
+    if (dniFound) {
+      //-- check same dni
+      if (!(dniFound.dni === thisDocente.dni)) {
+        return res.status(400).json({
+          message: ["The dni is already in use"],
+        });
+      }
+    }
 
     const docenteUpdated = await Docente.findOneAndUpdate(
       { _id: req.params.id },
-      {       name,
-        lastname,
-        dni: Number(dni), },
+      { name, lastname, dni: Number(dni) },
       { new: true }
     );
     return res.json(docenteUpdated);

@@ -1,38 +1,36 @@
+import { Button, Card, Input, Label, Message } from "../../components/ui";
+import { useConcepts } from "../../context/conceptsContext";
+import { conceptSchema } from "../../schemas/concept";
+
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Card, Input, Label, Message } from "../../components/ui";
-import { useDocentes } from "../../context/docentesContext";
 import { useAuth } from "../../context/authContext";
-import { docenteSchema } from "../../schemas/docente";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 export function ConceptFormPage() {
-  const { user } = useAuth();
-  const [block, setBlock] = useState(false);
-  const { createDocente, docentesErrors, updateDocente, getDocente } =
-    useDocentes();
-  const navigate = useNavigate();
   const params = useParams();
+  const { createConcept, conceptsErrors } = useConcepts();
+
   const {
     register,
     setValue,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(docenteSchema),
+    resolver: zodResolver(conceptSchema),
   });
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
       if (params.id) {
-        updateDocente(params.id, data);
+        // updateDocente(params.id, data);
       } else {
-        createDocente(data);
+        console.log(data);
+        // createConcept(data);
       }
-      setTimeout(() => {
-        navigate("/docentes");
-      }, 2000);
+      // navigate("/concepts");
     } catch (error) {
       console.log(error);
       // window.location.href = "/";
@@ -40,62 +38,52 @@ export function ConceptFormPage() {
   };
 
   useEffect(() => {
-    const loadDocente = async () => {
-      if (params.id) {
-        const docente = await getDocente(params.id);
-
-        setValue("dni", docente.dni);
-        setValue("name", docente.name);
-        setValue("lastname", docente.lastname);
-      }
-    };
-    loadDocente();
-  }, []);
-
-  useEffect(() => {
-    setBlock(true);
-  }, [docentesErrors.length]);
+    console.log(conceptsErrors);
+  }, [conceptsErrors]);
 
   return (
     <Card>
-      {docentesErrors.map((error, i) => (
+      {conceptsErrors.map((error, i) => (
         <Message message={error} key={i} />
       ))}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Label htmlFor="dni">DNI</Label>
+        <Label htmlFor="note">Nota</Label>
         <Input
           type="number"
-          name="dni"
-          placeholder="dni"
-          {...register("dni")}
+          step="0.01"
+          name="note"
+          placeholder="Nota"
+          {...register("note")}
           autoFocus
         />
-        {errors.dni && (
-          <p className="text-red-500 text-xs italic">Please enter a DNI.</p>
+        {errors.note && (
+          <p className="text-red-500 text-xs italic">{errors.note.message}</p>
         )}
-        <Label htmlFor="name">Nombre</Label>
+
+        <Label htmlFor="startDate">Fecha de inicio</Label>
         <Input
-          type="text"
-          name="name"
-          placeholder="name"
-          {...register("name")}
+          type="date"
+          name="startDate"
+          placeholder="Fecha de inicio"
+          {...register("startDate")}
           autoFocus
         />
-        {errors.name && (
-          <p className="text-red-500 text-xs italic">Please enter a name.</p>
-        )}
-        <Label htmlFor="lastname">Apellidos</Label>
-        <Input
-          type="text"
-          name="lastname"
-          placeholder="lastname"
-          {...register("lastname")}
-          autoFocus
-        />
-        {errors.lastname && (
+        {errors.startDate && (
           <p className="text-red-500 text-xs italic">
-            Please enter a lastname.
+            Please enter a startDate.
           </p>
+        )}
+
+        <Label htmlFor="endDate">Fecha de fin</Label>
+        <Input
+          type="date"
+          name="endDate"
+          placeholder="Fecha de fin"
+          {...register("endDate")}
+          autoFocus
+        />
+        {errors.endDate && (
+          <p className="text-red-500 text-xs italic">Please enter a endDate.</p>
         )}
         <Button>Save</Button>
       </form>

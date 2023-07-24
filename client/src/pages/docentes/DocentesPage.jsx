@@ -75,7 +75,6 @@ export function DocentesPage() {
             <h1 className="font-bold text-xl">
               No docentes yet, please add a new task
             </h1>
-            <Link to="/add-docente">Agregar docente</Link>
           </div>
         </div>
       ) : (

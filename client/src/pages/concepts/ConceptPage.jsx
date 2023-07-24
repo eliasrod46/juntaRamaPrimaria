@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useDocentes } from "../../context/docentesContext";
 import { useConcepts } from "../../context/conceptsContext";
 import { ImFileEmpty } from "react-icons/im";
@@ -83,6 +83,7 @@ export function ConceptPage() {
         {concepts.length === 0 ? (
           <div className="flex justify-center items-center p-10">
             <div>
+              <Link to={`/add-concept/${docente._id}`}>Agregar concepto</Link>
               <ImFileEmpty className="text-6xl text-gray-400 m-auto my-2" />
               <h1 className="font-bold text-xl">
                 No concepts yet, please add a new concept
@@ -91,6 +92,7 @@ export function ConceptPage() {
           </div>
         ) : (
           <div className="px-6 py-4">
+            <Link to={`/add-concept/${docente._id}`}>Agregar concepto</Link>
             <MUIDataTable
               title={"Lista de Conceptos"}
               data={concepts}

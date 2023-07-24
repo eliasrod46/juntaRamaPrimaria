@@ -5,8 +5,9 @@ export const getConcepts = async (req, res) => {
     const docente = await Docente.findById(req.params.did).populate("concepts");
 
     if (!docente === -1)
-      return res.status(404).json({ message: "sera not found" });
-    res.json({ concepts: docente.concepts });
+      return res.status(404).json({ message: "docente not found" });
+
+    res.json(docente.concepts);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
