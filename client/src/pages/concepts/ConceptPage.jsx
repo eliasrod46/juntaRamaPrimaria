@@ -3,14 +3,15 @@ import { Link, useParams } from "react-router-dom";
 import { useDocentes } from "../../context/docentesContext";
 import { useConcepts } from "../../context/conceptsContext";
 import { ImFileEmpty } from "react-icons/im";
-// import { FaEye, FaTrash, FaPen } from "react-icons/Fa";
+import { FaTrash } from "react-icons/Fa";
 import MUIDataTable from "mui-datatables";
 
 export function ConceptPage() {
   const params = useParams();
   const { docentes, getDocente } = useDocentes();
-  const { concepts, getConcepts } = useConcepts();
+  const { concepts, getConcepts, deleteConcept } = useConcepts();
   const [docente, setDocente] = useState({});
+  const [generalConcept, setGeneralConcept] = useState();
 
   useEffect(() => {
     const loadDocente = async () => {
@@ -22,6 +23,14 @@ export function ConceptPage() {
     };
     loadDocente();
   }, []);
+
+  useEffect(() => {
+    const test = concepts.reduce(
+      (accumulator, concepts) => accumulator + concepts.concept,
+      0
+    );
+    setGeneralConcept(test / 6);
+  }, [concepts]);
 
   const columns = [
     {
@@ -45,7 +54,18 @@ export function ConceptPage() {
       label: "Fecha Inicio",
       options: {
         filter: true,
-        sort: true,
+        customBodyRenderLite: (dataIndex) => {
+          let show = concepts[dataIndex].startDate
+            .split("T")[0]
+            .split("-")
+            .reverse()
+            .join("/");
+          return (
+            <div className="flex items-center justify-evenly">
+              <span>{`${show}`}</span>
+            </div>
+          );
+        },
       },
     },
     {
@@ -53,7 +73,18 @@ export function ConceptPage() {
       label: "Fecha Fin",
       options: {
         filter: true,
-        sort: true,
+        customBodyRenderLite: (dataIndex) => {
+          let show = concepts[dataIndex].endDate
+            .split("T")[0]
+            .split("-")
+            .reverse()
+            .join("/");
+          return (
+            <div className="flex items-center justify-evenly">
+              <span>{`${show}`}</span>
+            </div>
+          );
+        },
       },
     },
     {
@@ -80,7 +111,16 @@ export function ConceptPage() {
         customBodyRenderLite: (dataIndex) => {
           return (
             <div className="flex items-center justify-evenly">
-              <h1>holis</h1>
+              <Link
+                className="p-2 text-xl bg-red-700 text-white rounded transition-all delay-100 ease-in-out  hover:bg-white hover:text-red-700"
+                // to={`/concepts/${docente._id}`}
+                onClick={() => {
+                  deleteConcept(concepts[dataIndex]._id, docente._id);
+                  navigate(`/concepts/${params.did}`);
+                }}
+              >
+                <FaTrash />
+              </Link>
             </div>
           );
         },
@@ -89,7 +129,7 @@ export function ConceptPage() {
   ];
 
   const options = {
-    filterType: "checkbox",
+    // filterType: "checkbox",
   };
 
   return (
@@ -109,6 +149,7 @@ export function ConceptPage() {
         ) : (
           <div className="px-6 py-4">
             <Link to={`/add-concept/${docente._id}`}>Agregar concepto</Link>
+            <span>concepto general: {generalConcept}</span>
             <MUIDataTable
               title={"Lista de Conceptos"}
               data={concepts}

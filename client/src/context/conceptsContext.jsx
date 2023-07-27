@@ -16,20 +16,7 @@ export const useConcepts = () => {
 };
 
 export function ConceptProvider({ children }) {
-  const [isOk, setIsOk] = useState(false);
   const [concepts, setConcepts] = useState([]);
-  const [errors, setErrors] = useState([]);
-
-  // clear errors after 5 seconds
-  useEffect(() => {
-    if (errors.length > 0) {
-      const timer = setTimeout(() => {
-        setErrors([]);
-        setIsOk(false);
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [errors]);
 
   const getConcepts = async (did) => {
     const res = await getConceptsRequest(did);
@@ -42,13 +29,12 @@ export function ConceptProvider({ children }) {
       if (res.status === 204)
         setConcepts(concepts.filter((concept) => concept.id !== cid));
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.message);
     }
   };
 
   const createConcept = async (did, concept) => {
     try {
-      setIsOk(true);
       const res = await createConceptRequest(did, concept);
       console.log(res);
       return true;
@@ -57,19 +43,18 @@ export function ConceptProvider({ children }) {
       alert(error.response.data);
       console.log(error.response.data);
     }
-
-    return (
-      <ConceptContext.Provider
-        value={{
-          isOk,
-          concepts,
-          getConcepts,
-          deleteConcept,
-          createConcept,
-        }}
-      >
-        {children}
-      </ConceptContext.Provider>
-    );
   };
+
+  return (
+    <ConceptContext.Provider
+      value={{
+        concepts,
+        getConcepts,
+        deleteConcept,
+        createConcept,
+      }}
+    >
+      {children}
+    </ConceptContext.Provider>
+  );
 }

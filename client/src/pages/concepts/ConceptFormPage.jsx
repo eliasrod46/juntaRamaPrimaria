@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 
 export function ConceptFormPage() {
   const params = useParams();
-  const { createConcept, errors: conceptsErrors, isOk } = useConcepts();
+  const { createConcept } = useConcepts();
   const [length, setLength] = useState(0);
 
   const {
@@ -30,19 +30,15 @@ export function ConceptFormPage() {
         startDate: new Date(`${data.startDate}`),
         endDate: new Date(`${data.endDate}`),
       };
-      const res = await createConcept(params.did, dataToSend);
+      createConcept(params.did, dataToSend);
       navigate(`/concepts/${params.did}`);
     } catch (error) {
       console.log(error);
-      // window.location.href = "/";
     }
   };
 
   return (
     <Card>
-      {conceptsErrors.map((error, i) => (
-        <Message message={error} key={i} />
-      ))}
       <form onSubmit={handleSubmit(onSubmit)}>
         <Label htmlFor="note">Nota</Label>
         <Input

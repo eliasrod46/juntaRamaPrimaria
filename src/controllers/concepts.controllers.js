@@ -17,20 +17,20 @@ export const getConcepts = async (req, res) => {
 export const deleteConcept = async (req, res) => {
   try {
     const docente = await Docente.findById(req.params.did).populate("concepts");
-    if (!docente) return res.status(404).json({ message: "Docente not found" });
+    if (!docente) return res.status(404).json(["Docente not found"]);
 
     const concepts = docente.concepts;
 
     const indexToDelete = concepts.findIndex(
-      (concept) => concept.id === req.params.cid
+      (concept) => concept._id == req.params.cid
     );
+
     if (indexToDelete === -1)
       return res.status(404).json({ message: "Concept not found" });
 
     concepts.splice(indexToDelete, 1);
-    docente.update({ concepts });
-
-    return res.satus(201);
+    await Docente.updateOne({ _id: docente._id }, { concepts });
+    res.status(201);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -96,6 +96,13 @@ export const createConcept = async (req, res) => {
       { _id: docente._id },
       { concepts }
     );
+
+    // calculate generalconcepto (calculated in forntend)
+    // const test = concepts.reduce(
+    //   (accumulator, concepts) => accumulator + concepts.concept,
+    //   0
+    // );
+    // setGeneralConcept(test / 6);
 
     res.status(201);
   } catch (error) {
