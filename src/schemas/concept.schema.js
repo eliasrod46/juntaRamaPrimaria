@@ -1,25 +1,13 @@
 import { z } from "zod";
 
-
-// note: {type: Number, required: true, trim: true},
-// startDate: {type: Date, required: true, trim: true},
-// endDate: {type: Date, required: true, trim: true},
-
-
-
-// sanitizedNote: {type: Number, required: true, trim: true}
-
-
-
 export const ConceptSchema = z.object({
-  note: z.string({
-    required_error: "Note is required",
+  note: z.string().refine((val) => !Number.isNaN(parseInt(val, 10)), {
+    message: "Expected number, received a string",
   }),
-  startDate: z.date({
-    required_error: "startDate is required",
+  startDate: z.string().refine((val) => !(val instanceof Date), {
+    message: "Expected number, received a string",
   }),
-  endDate: z.date({
-    required_error: "endDate is required",
-  })
+  endDate: z.string().refine((val) => !(val instanceof Date), {
+    message: "Expected number, received a string",
+  }),
 });
-

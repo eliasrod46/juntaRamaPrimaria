@@ -26,7 +26,7 @@ export function ConceptPage() {
   const columns = [
     {
       name: "note",
-      label: "Note",
+      label: "Nota",
       options: {
         filter: true,
         sort: true,
@@ -34,7 +34,7 @@ export function ConceptPage() {
     },
     {
       name: "sanitizedNote",
-      label: "sanitizedNote",
+      label: "Nota equivalente",
       options: {
         filter: true,
         sort: true,
@@ -42,7 +42,7 @@ export function ConceptPage() {
     },
     {
       name: "startDate",
-      label: "StartDate",
+      label: "Fecha Inicio",
       options: {
         filter: true,
         sort: true,
@@ -50,7 +50,23 @@ export function ConceptPage() {
     },
     {
       name: "endDate",
-      label: "EndDate",
+      label: "Fecha Fin",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "diffDates",
+      label: "Meses trabajados",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "concept",
+      label: "Concepto",
       options: {
         filter: true,
         sort: true,

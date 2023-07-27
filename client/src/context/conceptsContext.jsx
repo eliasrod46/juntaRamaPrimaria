@@ -3,8 +3,8 @@ import {
   createConceptRequest,
   deleteConceptRequest,
   getConceptsRequest,
-  updateConceptRequest,
 } from "../api/concepts";
+import { date } from "zod";
 
 const ConceptContext = createContext();
 
@@ -16,18 +16,20 @@ export const useConcepts = () => {
 };
 
 export function ConceptProvider({ children }) {
+  const [isOk, setIsOk] = useState(false);
   const [concepts, setConcepts] = useState([]);
-  const [conceptsErrors, setConceptsErrors] = useState([]);
+  const [errors, setErrors] = useState([]);
 
   // clear errors after 5 seconds
   useEffect(() => {
-    if (conceptsErrors.length > 0) {
+    if (errors.length > 0) {
       const timer = setTimeout(() => {
-        setConceptsErrors([]);
+        setErrors([]);
+        setIsOk(false);
       }, 5000);
       return () => clearTimeout(timer);
     }
-  }, [conceptsErrors]);
+  }, [errors]);
 
   const getConcepts = async (did) => {
     const res = await getConceptsRequest(did);
@@ -46,36 +48,28 @@ export function ConceptProvider({ children }) {
 
   const createConcept = async (did, concept) => {
     try {
+      setIsOk(true);
       const res = await createConceptRequest(did, concept);
-      console.log(res.data);
+      console.log(res);
+      return true;
     } catch (error) {
+      // console.log(error);
+      alert(error.response.data);
       console.log(error.response.data);
-      setDocentesErrors(error.response.data.message);
     }
-  };
 
-  const updateConcept = async (cid, did, concept) => {
-    try {
-      const res = await updateConceptRequest(cid, did, concept);
-      console.log(res.data);
-    } catch (error) {
-      // console.log(error.response.data.message);
-      setDocentesErrors(error.response.data.message);
-    }
+    return (
+      <ConceptContext.Provider
+        value={{
+          isOk,
+          concepts,
+          getConcepts,
+          deleteConcept,
+          createConcept,
+        }}
+      >
+        {children}
+      </ConceptContext.Provider>
+    );
   };
-
-  return (
-    <ConceptContext.Provider
-      value={{
-        concepts,
-        getConcepts,
-        deleteConcept,
-        createConcept,
-        updateConcept,
-        conceptsErrors,
-      }}
-    >
-      {children}
-    </ConceptContext.Provider>
-  );
 }

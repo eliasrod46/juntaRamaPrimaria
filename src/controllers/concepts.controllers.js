@@ -1,4 +1,5 @@
 import Docente from "../models/docente.model.js";
+import { sanitizeNote, diffMoths } from "../libs/conceptsUtils.js";
 
 export const getConcepts = async (req, res) => {
   try {
@@ -39,81 +40,66 @@ export const createConcept = async (req, res) => {
   try {
     const { note, startDate, endDate } = req.body;
     const docente = await Docente.findById(req.params.did).populate("concepts");
-    if (!docente) return res.status(404).json({ message: "Docente not found" });
+    if (!docente) return res.status(404).json(["Docente not found"]);
 
     // check note value;
-    if (!Number(note) || Number(note) < 1 || Number(note) > 10) {
-      return res.status(400).json({
-        message: ["The note must be a number beetween 1 - 10"],
-      });
+    if (!Number(note) || Number(note) < 6 || Number(note) > 10) {
+      return res
+        .status(400)
+        .json(["The note must be a number beetween 6 - 10"]);
     }
     // check dates values;
-    if (!(startDate instanceof Date) || !(endDate instanceof Date)) {
-      return res.status(400).json({
-        message: ["The startDate and endDate must be a Date data"],
-      });
+    if (
+      new Date(startDate) == "Invalid Date" ||
+      new Date(endDate) == "Invalid Date"
+    ) {
+      return res
+        .status(400)
+        .json(["The startDate and endDate must be a Date data"]);
     }
 
+    //-- ckh not exceed 15 concepts
     if (docente.concepts.length == 15) {
-      return res.status(404).json({
-        message: `
-          You have reached the maximum number of concepts, please delete or edit an existing concept`,
-      });
+      return res
+        .status(404)
+        .json([
+          `You have reached the maximum number of concepts, please delete an existing concept`,
+        ]);
     }
 
-    const sanitizedNote = sanitize(Number(note));
+    //-- Calculate Sanitized note & worked moths
+    const sanitizedNote = sanitizeNote(Number(note));
+    let diffDates = diffMoths(startDate, endDate);
 
-    concepts = docente.concepts;
-    const id = concepts.length == 0 ? 1 : concepts[cocncepts.length - 1].id + 1;
-
-    concepts.push({ id, note, sanitizedNote, startDate, endDate });
-
-    await docente.update({ concepts });
-
-    res.json(docente);
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-};
-
-export const updateConcept = async (req, res) => {
-  try {
-    const { note, startDate, endDate } = req.body;
-    const docente = await Docente.findById(req.params.did).populate("concepts");
-    if (!docente) return res.status(404).json({ message: "Docente not found" });
-
-    // check note value;
-    if (!Number(note) || Number(note) < 1 || Number(note) > 10) {
-      return res.status(400).json({
-        message: ["The note must be a number beetween 1 - 10"],
-      });
-    }
-    // check dates values;
-    if (!(startDate instanceof Date) || !(endDate instanceof Date)) {
-      return res.status(400).json({
-        message: ["The startDate and endDate must be a Date data"],
-      });
+    //-- tunc 10.xx
+    if (diffDates > 10) {
+      diffDates = Math.trunc(diffDates);
     }
 
-    concepts = docente.concepts;
+    //-- cal concept
+    const concept = ((diffDates * sanitizedNote) / 10).toFixed(2);
 
-    const indexToUpdate = concepts.findIndex(
-      (concept) => concept.id === req.params.cid
+    const concepts = docente.concepts;
+    const id = concepts.length == 0 ? 1 : concepts[concepts.length - 1].id + 1;
+
+    concepts.push({
+      id,
+      note,
+      sanitizedNote,
+      startDate,
+      endDate,
+      diffDates,
+      concept,
+    });
+
+    const updatedDocente = await Docente.updateOne(
+      { _id: docente._id },
+      { concepts }
     );
-    if (indexToUpdate === -1)
-      return res.status(404).json({ message: "Concept not found" });
 
-    concepts[indexToUpdate] = {
-      id: cid,
-      note: note || concepts[indexToUpdate].note,
-      startDate: startDate || concepts[indexToUpdate].startDate,
-      endDate: endDate || concepts[indexToUpdate].endDate,
-    };
-
-    await docente.update({ concepts });
-
-    return res.json(docente);
+    res.status(201);
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: error.message });
   }
 };

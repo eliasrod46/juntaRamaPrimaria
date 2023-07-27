@@ -10,7 +10,8 @@ import { useForm } from "react-hook-form";
 
 export function ConceptFormPage() {
   const params = useParams();
-  const { createConcept, conceptsErrors } = useConcepts();
+  const { createConcept, errors: conceptsErrors, isOk } = useConcepts();
+  const [length, setLength] = useState(0);
 
   const {
     register,
@@ -24,22 +25,18 @@ export function ConceptFormPage() {
 
   const onSubmit = async (data) => {
     try {
-      if (params.id) {
-        // updateDocente(params.id, data);
-      } else {
-        console.log(data);
-        // createConcept(data);
-      }
-      // navigate("/concepts");
+      const dataToSend = {
+        note: data.note,
+        startDate: new Date(`${data.startDate}`),
+        endDate: new Date(`${data.endDate}`),
+      };
+      const res = await createConcept(params.did, dataToSend);
+      navigate(`/concepts/${params.did}`);
     } catch (error) {
       console.log(error);
       // window.location.href = "/";
     }
   };
-
-  useEffect(() => {
-    console.log(conceptsErrors);
-  }, [conceptsErrors]);
 
   return (
     <Card>

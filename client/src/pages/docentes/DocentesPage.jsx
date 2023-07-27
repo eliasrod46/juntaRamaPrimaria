@@ -70,6 +70,8 @@ export function DocentesPage() {
     <>
       {docentes.length === 0 ? (
         <div className="flex justify-center items-center p-10">
+          <Link to="/add-docente">Agregar docente</Link>
+
           <div>
             <ImFileEmpty className="text-6xl text-gray-400 m-auto my-2" />
             <h1 className="font-bold text-xl">

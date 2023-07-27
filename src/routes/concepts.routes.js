@@ -3,7 +3,6 @@ import {
   createConcept,
   deleteConcept,
   getConcepts,
-  updateConcept,
 } from "../controllers/concepts.controllers.js";
 import { auth } from "../middlewares/auth.middleware.js";
 import { validateSchema } from "../middlewares/validator.middleware.js";
@@ -20,13 +19,6 @@ router.post(
   auth,
   validateSchema(ConceptSchema),
   createConcept
-);
-
-router.put(
-  "/:cid/docente/:did",
-  auth,
-  validateSchema(ConceptSchema),
-  updateConcept
 );
 
 export default router;
