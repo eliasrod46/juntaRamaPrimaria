@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Card, Input, Label, Message } from "../../components/ui";
 import { useDocentes } from "../../context/docentesContext";
-import { useAuth } from "../../context/authContext";
+// import { useAuth } from "../../context/authContext";
 import { docenteSchema } from "../../schemas/docente";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

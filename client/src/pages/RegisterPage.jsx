@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useAuth } from "../context/authContext";
+import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { Card, Message, Button, Input, Label } from "../components/ui";
 import { useForm } from "react-hook-form";
@@ -24,8 +24,6 @@ function Register() {
   useEffect(() => {
     if (isAuthenticated) navigate("/dashboard");
   }, [isAuthenticated]);
-
-
 
   return (
     <div className="h-[calc(100vh-100px)] flex items-center justify-center">

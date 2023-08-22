@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDocentes } from "../../context/docentesContext";
 import { ImFileEmpty } from "react-icons/im";
-import { FaEye, FaPen } from "react-icons/Fa";
+import { FaEye, FaPen } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import MUIDataTable from "mui-datatables";
 

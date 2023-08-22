@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useDocentes } from "../../context/docentesContext";
 import { ImFileEmpty } from "react-icons/im";
-import { FaEye } from "react-icons/Fa";
+import { FaEye } from "react-icons/fa";
 import MUIDataTable from "mui-datatables";
 
 export function ConceptsPage() {
