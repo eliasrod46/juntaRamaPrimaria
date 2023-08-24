@@ -10,6 +10,9 @@ import { ConceptSchema } from "../schemas/concept.schema.js";
 
 const router = Router();
 
+//--add year to docente
+router.post("/docente/:did/yearconcept", auth, addYearConcepts);
+
 router.get("/docente/:did", auth, getConcepts);
 
 router.delete("/:cid/docente/:did", auth, deleteConcept);
