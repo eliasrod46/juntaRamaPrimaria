@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useDocentes } from "../../context/docentesContext";
 import { useConcepts } from "../../context/conceptsContext";
 import { ImFileEmpty } from "react-icons/im";
-import { FaTrash } from "react-icons/Fa";
+import { FaTrash } from "react-icons/fa";
 import MUIDataTable from "mui-datatables";
 
 export function ConceptPage() {

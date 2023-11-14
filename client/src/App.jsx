@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
-import { AuthProvider } from "./context/authContext";
+import { AuthProvider } from "./context/AuthContext";
 import { DocenteProvider } from "./context/docentesContext";
 import { ConceptProvider } from "./context/conceptsContext";
 import { ProtectedRoute } from "./routes";

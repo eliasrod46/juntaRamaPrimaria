@@ -19,19 +19,29 @@ const docenteSchema = new mongoose.Schema(
       trim: true,
     },
 
-    concepts: {
+    gobalConcepts: {
       type: [
         {
-          id: { type: Number, required: true, unique: true },
-          note: { type: Number, required: true, trim: true },
-          startDate: { type: Date, required: true, trim: true },
-          endDate: { type: Date, required: true, trim: true },
-          diffDates: { type: Number, required: true, trim: true },
-          sanitizedNote: { type: Number, required: true, trim: true },
-          concept: { type: Number, required: true, trim: true },
+          year: { type: Number, required: true, unique: true },
+          subjects: [
+            {
+              name: { type: String, required: true },
+              generalConcept: { type: String },
+              concepts: [
+                {
+                  id: { type: Number, required: true, unique: true },
+                  note: { type: Number, required: true, trim: true },
+                  startDate: { type: Date, required: true, trim: true },
+                  endDate: { type: Date, required: true, trim: true },
+                  diffDates: { type: Number, required: true, trim: true },
+                  sanitizedNote: { type: Number, required: true, trim: true },
+                  concept: { type: Number, required: true, trim: true },
+                },
+              ],
+            },
+          ],
         },
       ],
-      validate: [(val) => val.length <= 15, "concepts exceeds the limit of 15"],
     },
 
     createdBy: {

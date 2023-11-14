@@ -1,6 +1,41 @@
 import Docente from "../models/docente.model.js";
 import { sanitizeNote, diffMoths } from "../libs/conceptsUtils.js";
 
+export const addYearConcepts = async (req, res) => {
+  try {
+    const docente = await Docente.findById(req.params.did).populate("concepts");
+    if (!docente) return res.status(404).json(["Docente not found"]);
+
+    if (
+      Number(req.body.year) < 1990 ||
+      Number(req.body.year) > new Date().getFullYear + 1
+    )
+      return res.status(404).json({
+        message: `The year most be between 1990 and ${
+          new Date().getFullYear + 1
+        } `,
+      });
+
+    const matchYear = docente.gobalConcepts.find(
+      (concept) => concept.year == req.body.year
+    );
+
+    if (matchYear)
+      return res.status(404).json({ message: "The year already exists" });
+
+    docente.gobalConcepts.push({
+      year: req.body.year,
+      generalConcept: 0,
+      subjects: [],
+    });
+
+    await Docente.updateOne({ _id: docente._id }, { gobalConcepts });
+    res.status(201);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 export const getConcepts = async (req, res) => {
   try {
     const docente = await Docente.findById(req.params.did).populate("concepts");
